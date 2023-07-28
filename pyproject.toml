@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "acitivity-tracking"
+name = "activity-tracking"
 version = "0.0.1"
 description = "Utility functions for desktop activity tracking"
 authors = ["elpachongco <earlsiachongco@gmail.com>"]
