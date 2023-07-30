@@ -3,6 +3,7 @@ import ctypes
 import logging
 import os
 import platform
+import psutil
 import subprocess
 
 logger = logging.getLogger()
@@ -56,24 +57,8 @@ def getForegroundWindowProcess(userOS=platform.system()):
         # pid variable
         windll.user32.GetWindowThreadProcessId(windowId, byref(pid))
 
-        # Run command 'tasklist', lookup which program has the pid
-        # and store CSV output to var
-        # TODO: try psutil?
-        tasklist = os.popen(
-            f'tasklist /FI \
-            "pid eq {pid.value}" /FO CSV'
-        )
-
-        processNameCSV = tasklist.read()
-        tasklist.close()
-
-        # Returns a csv reader object
-        readCSV = csv.reader(processNameCSV)
-        listCSV = list(readCSV)
-
-        # Position of the program name in the list
-        # I wouldn't consider this portable so this might change.
-        exeName = listCSV[10][0]
+        process = psutil.Process(pid.value)
+        exeName = process.name()
 
         # Return the window name, & process name running the window.
         return titleBuffer.value, exeName
@@ -91,12 +76,7 @@ def getForegroundWindowProcess(userOS=platform.system()):
 
         proc = int(result.stdout)
 
-        result = subprocess.run(
-            ["timeout", "1", "ps", "-p", str(proc), "-o", "comm="],
-            capture_output=True,
-            text=True,
-        )
-        processName = result.stdout.strip("\n")
+        processName = psutil.Process(proc).name()
 
         result = subprocess.run(
             ["timeout", "1", "xdotool", "getwindowfocus", "getwindowname"],
