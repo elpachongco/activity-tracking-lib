@@ -1,4 +1,4 @@
-# Activity tracking library
+# desktopspy
 
 This library contains utility functions for recording desktop activity on windows and linux
 
@@ -12,6 +12,7 @@ I created this for my productivity tool [Activity Monitor](https://github.com/el
 ### Get foreground window name, process, pid
 
 ```python3
+from desktopspy.trackers import getForegroundWindow
 >>> getForegroundWindow()
 ('New Tab`, 2500)
 
@@ -23,6 +24,7 @@ I created this for my productivity tool [Activity Monitor](https://github.com/el
 ### isUserActive
 
 ```python3
+from desktopspy.trackers import isUserActive
 >>> isUserActive()
 True
 ```
@@ -34,13 +36,13 @@ This library is now available on the python package index.
 Visit the [pypi page](https://pypi.org/project/activity-tracking/).
 
 ```bash
-pip install activity-tracking
+pip install desktopspy
 ```
 
 or with python-poetry
 
 ```bash
-poetry add activity-tracking
+poetry add desktopspy
 ```
 
-Please note that this software is in early stage of development. 
+Please note that this software is in very early stage of development. 
