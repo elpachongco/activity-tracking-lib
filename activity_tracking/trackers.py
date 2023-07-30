@@ -1,9 +1,6 @@
-import csv
 import ctypes
 import logging
-import os
 import platform
-import psutil
 import subprocess
 
 logger = logging.getLogger()
@@ -20,18 +17,9 @@ class LASTINPUTINFO(ctypes.Structure):
 
 
 def getForegroundWindow(userOS=platform.system()):
-    """
-    Get window name of current foreground window
-    RETURNS: str name of window
-    """
-    window, _ = getForegroundWindowProcess(userOS)
-    return window
-
-
-def getForegroundWindowProcess(userOS=platform.system()):
     """ Get window name and process name of current foreground window
      Makes use of windows API
-     RETURNS: [str name of window, str name of process]
+     RETURNS: (str name of window, pid of window)
     """
     if userOS == "Windows":
         # Get the unique window ID of the foreground window
@@ -57,11 +45,8 @@ def getForegroundWindowProcess(userOS=platform.system()):
         # pid variable
         windll.user32.GetWindowThreadProcessId(windowId, byref(pid))
 
-        process = psutil.Process(pid.value)
-        exeName = process.name()
-
         # Return the window name, & process name running the window.
-        return titleBuffer.value, exeName
+        return titleBuffer.value, pid.value
 
     if userOS == "Linux":
         result = subprocess.run(
@@ -74,9 +59,7 @@ def getForegroundWindowProcess(userOS=platform.system()):
         if result.stdout == "":
             return "", ""
 
-        proc = int(result.stdout)
-
-        processName = psutil.Process(proc).name()
+        pid = int(result.stdout)
 
         result = subprocess.run(
             ["timeout", "1", "xdotool", "getwindowfocus", "getwindowname"],
@@ -85,7 +68,7 @@ def getForegroundWindowProcess(userOS=platform.system()):
         )
 
         windowName = result.stdout.strip("\n")
-        return windowName, processName
+        return windowName, pid
 
     logger.error("OS is Unknown: %s", userOS)
     raise Exception("OS is Unknown: %s", userOS)
@@ -104,7 +87,6 @@ def isUserActive(userOS=platform.system(), minGap=800):
 
     # TODO: Fix minGap linux implementation.
 
-    # Store last input time to class
     if userOS == "Windows":
 
         lastInputInfo = LASTINPUTINFO()

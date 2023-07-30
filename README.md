@@ -9,8 +9,23 @@ I created this for my productivity tool [Activity Monitor](https://github.com/el
 
 ## Functions 
 
-- Get foreground window name, process, pid
-- is user active
+### Get foreground window name, process, pid
+
+```python3
+>>> getForegroundWindow()
+('New Tab`, 2500)
+
+>>> import psutil
+>>> psutil.Process(2500).name()
+'chrome.exe'
+```
+
+### isUserActive
+
+```python3
+>>> isUserActive()
+True
+```
 
 ## Installation
 
