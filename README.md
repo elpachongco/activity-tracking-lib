@@ -33,7 +33,7 @@ True
 
 This library is now available on the python package index.
 
-Visit the [pypi page](https://pypi.org/project/activity-tracking/).
+Visit the [pypi page](https://pypi.org/project/desktopspy).
 
 ```bash
 pip install desktopspy

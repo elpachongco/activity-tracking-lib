@@ -4,10 +4,10 @@ version = "0.0.1"
 description = "Utility functions for desktop activity tracking"
 authors = ["elpachongco <earlsiachongco@gmail.com>"]
 readme="README.md"
-packages = [{include = "activity_tracking"}]
+packages = [{include = "desktopspy"}]
 license = "BSD-3-Clause "
-homepage = "https://github.com/elpachongco/activity-tracking-lib"
-repository = "https://github.com/elpachongco/activity-tracking-lib"
+homepage = "https://github.com/elpachongco/desktopspy"
+repository = "https://github.com/elpachongco/desktopspy"
 documentation = ""
 keywords = ["desktop"]
 classifiers = []
