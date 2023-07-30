@@ -1,27 +1,31 @@
-import platform
+import csv
 import ctypes
 import logging
-import csv
-import subprocess
 import os
+import platform
+import subprocess
 
 logger = logging.getLogger()
 """This library inherits the logger of the importing library"""
 
 if platform.system() == "Windows":
-    # ctypes handles the Windows-specific functions
-    from ctypes import wintypes, windll, create_unicode_buffer, byref
+    """ ctypes handles the Windows-specific functions """
+    from ctypes import byref, create_unicode_buffer, windll, wintypes
+
 
 class LASTINPUTINFO(ctypes.Structure):
     # Special class for storing lastinputinfo data from windows
     _fields_ = [("cbSize", ctypes.c_ulong), ("dwTime", ctypes.c_ulong)]
 
-def getForegroundWindow(userOS=platform.system()):
-    # Get window name of current foreground window
-    # RETURNS: str name of window
 
-    window, _ = getForegroundWindow(userOS)
+def getForegroundWindow(userOS=platform.system()):
+    """
+    Get window name of current foreground window
+    RETURNS: str name of window
+    """
+    window, _ = getForegroundWindowProcess(userOS)
     return window
+
 
 def getForegroundWindowProcess(userOS=platform.system()):
     """ Get window name and process name of current foreground window
@@ -57,7 +61,7 @@ def getForegroundWindowProcess(userOS=platform.system()):
         # TODO: try psutil?
         tasklist = os.popen(
             f'tasklist /FI \
-						"pid eq {pid.value}" /FO CSV'
+            "pid eq {pid.value}" /FO CSV'
         )
 
         processNameCSV = tasklist.read()
@@ -106,18 +110,19 @@ def getForegroundWindowProcess(userOS=platform.system()):
     logger.error("OS is Unknown: %s", userOS)
     raise Exception("OS is Unknown: %s", userOS)
 
+
 def isUserActive(userOS=platform.system(), minGap=800):
     """
     Compares gap between last time of input from mouse or kb and current time.
     ARGS:
-    	lastInputInfo -> Instance of class LASTINPUTINFO(ctypes.Structure),
-    	minGap -> Int, minimum time between activity in mseconds
-    	userOS -> string, the platform the user is using ["Windows", "Linux"]
+        lastInputInfo -> Instance of class LASTINPUTINFO(ctypes.Structure),
+        minGap -> Int, minimum time between activity in mseconds
+        userOS -> string, the platform the user is using ["Windows", "Linux"]
     Returns:
       True if the user made an input during `minGap`, else False
     """
 
-    ### TODO: Fix minGap linux implementation.
+    # TODO: Fix minGap linux implementation.
 
     # Store last input time to class
     if userOS == "Windows":
@@ -135,11 +140,13 @@ def isUserActive(userOS=platform.system(), minGap=800):
         return timeGap <= minGap
 
     if userOS == "Linux":
-        # Returns: 234324.2 234234.3
-        # See proc man page for /proc/uptime
-        # result = subprocess.run(["cat", "/proc/uptime"], capture_output=True, text=True)
-        # Get first item only
-        # currentTimeMs = float(result.stdout.split(" ")[0]) * 1000
+        """
+        Returns: 234323.2 234234.3
+        See proc man page for /proc/uptime
+        result = subprocess.run(["cat", "/proc/uptime"], capture_output=True, text=True)
+        Get first item only
+        currentTimeMs = float(result.stdout.split(" ")[0]) * 1000
+        """
 
         result = subprocess.run(
             # Implementation depends on this command:
