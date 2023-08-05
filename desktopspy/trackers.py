@@ -57,7 +57,7 @@ def getForegroundWindow(userOS=platform.system()):
 
         # pid is blank if no window is focused.
         if result.stdout == "":
-            return "", ""
+            return "", None
 
         pid = int(result.stdout)
 
