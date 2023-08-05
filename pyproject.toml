@@ -16,6 +16,7 @@ include = ["CHANGELOG.md"]
 [tool.poetry.dependencies]
 python = "^3.8"
 psutil = "^5.9.5"
+pytest = "^7.4.0"
 
 [tool.poetry.dev-dependencies]
 pdoc = "^14.0.0"
