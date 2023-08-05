@@ -7,7 +7,7 @@ logger = logging.getLogger()
 """This library inherits the logger of the importing library"""
 
 if platform.system() == "Windows":
-    """ ctypes handles the Windows-specific functions """
+    """ctypes handles the Windows-specific functions"""
     from ctypes import byref, create_unicode_buffer, windll, wintypes
 
 
@@ -17,9 +17,9 @@ class LASTINPUTINFO(ctypes.Structure):
 
 
 def getForegroundWindow(userOS=platform.system()):
-    """ Get window name and process name of current foreground window
-     Makes use of windows API
-     RETURNS: (str name of window, pid of window)
+    """Get window name and process name of current foreground window
+    Makes use of windows API
+    RETURNS: (str name of window, pid of window)
     """
     if userOS == "Windows":
         # Get the unique window ID of the foreground window
@@ -88,7 +88,6 @@ def isUserActive(userOS=platform.system(), minGap=800):
     # TODO: Fix minGap linux implementation.
 
     if userOS == "Windows":
-
         lastInputInfo = LASTINPUTINFO()
         lastInputInfo.cbSize = ctypes.sizeof(LASTINPUTINFO)
 
